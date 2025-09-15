@@ -8,7 +8,7 @@ Python packages:
 > threading
 > time
 > pyshark
-Install those packages by using "pip install <package-name>"
+Install those packages by using pip install <package-name>
 
 
 service setup:
