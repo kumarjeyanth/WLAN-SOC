@@ -1,5 +1,5 @@
 # Wireless-Traffic-Analysis---Project
-Developed Python-based (Scapy, Pandas, Matplotlib) traffic analysis tool with Suricata , Power BI visualization, and secure log deployment via Apache &amp; Ngrok
+Developed Python-based (Scapy, Pandas, Matplotlib) traffic analysis tool with Suricata , Power BI visualization, and secure log deployment via Apache & Ngrok
 
 #Requirements:
 Python packages:
@@ -8,7 +8,7 @@ Python packages:
 > threading
 > time
 > pyshark
-Install those packages by using "pip install "<package-name>"
+Install those packages by using "pip install <package-name>"
 
 
 service setup:
