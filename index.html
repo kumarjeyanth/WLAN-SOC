@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLAN Enterprise SOC Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-color: #161b22;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --alert-high: #f85149;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+        .status-badge {
+            background-color: #238636;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--panel-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+        th {
+            background-color: #21262d;
+            color: var(--accent-color);
+        }
+        tr:hover {
+            background-color: #30363d;
+        }
+        .severity-1 { color: var(--alert-high); font-weight: bold; }
+        .severity-2 { color: #ff944d; }
+        .severity-3 { color: #ffea7f; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>WLAN SOC - Live Intrusion Detection View</h2>
+        <span class="status-badge">Engine: Active Monitoring</span>
+    </header>
+
+    <div class="container">
+        <h3>Threat Alerts Engine Logs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Signature/Threat Details</th>
+                    <th>Category</th>
+                    <th>Severity</th>
+                    <th>Source IP</th>
+                    <th>Destination IP</th>
+                </tr>
+            </thead>
+            <tbody id="log-table-body">
+                <tr>
+                    <td colspan="6" style="text-align: center;">Awaiting pipeline streams...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api/logs'; // Replace with Ngrok URL when accessing externally
+
+        async function fetchLogs() {
+            try {
+                const response = await fetch(API_URL);
+                const logs = await response.json();
+                const tableBody = document.getElementById('log-table-body');
+                tableBody.innerHTML = '';
+
+                if (logs.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No threats detected yet.</td></tr>`;
+                    return;
+                }
+
+                logs.forEach(log => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${log.timestamp.split('.')[0]}</td>
+                        <td>${log.signature}</td>
+                        <td>${log.category}</td>
+                        <td class="severity-${log.severity}">${log.severity}</td>
+                        <td>${log.src_ip}</td>
+                        <td>${log.dest_ip}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+            }
+        }
+
+        // Poll API every 3 seconds
+        setInterval(fetchLogs, 3000);
+        fetchLogs();
+    </script>
+</body>
+</html>
