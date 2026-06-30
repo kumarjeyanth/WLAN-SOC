@@ -1,12 +1,12 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>WLAN Enterprise SOC Dashboard</title>
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Google Fonts: Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>WLAN Enterprise SOC Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
     tailwind.config = {
       theme: {
         extend: {
@@ -28,7 +28,7 @@
       }
     }
   </script>
-<style data-purpose="custom-layout">
+  <style data-purpose="custom-layout">
     body {
       background-color: #0d1117;
       color: #c9d1d9;
@@ -39,285 +39,291 @@
     }
   </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col" style="cursor: grabbing; user-select: none;">
-<!-- BEGIN: MainHeader -->
-<header class="flex items-center justify-between px-6 py-4 border-b border-soc-border" data-purpose="top-navigation">
-<div class="flex items-center gap-4">
-<!-- Dashboard Logo & Brand -->
-<div class="bg-soc-blue p-2 rounded-md">
-<svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-</div>
-<h1 class="text-xl font-bold text-white tracking-tight">WLAN Enterprise SOC Dashboard</h1>
-<div class="ml-4 flex items-center bg-green-900/20 px-3 py-1 rounded-full border border-soc-green/30">
-<span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
-<span class="text-[10px] font-bold text-soc-green uppercase tracking-wider">Engine: Active</span>
-</div>
-</div>
-<!-- Header Right Side Controls -->
-<div class="flex items-center gap-6 text-soc-text-muted">
-<div class="flex items-center gap-4 text-sm font-medium border-r border-soc-border pr-6">
-<div class="flex items-center gap-2">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<span class="">MON, JUN 29, 2025</span>
-</div>
-<div class="bg-[#1b2129] px-3 py-1 rounded text-white font-mono border border-soc-border">
-          21:52:18
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+  <header class="flex items-center justify-between px-6 py-4 border-b border-soc-border" data-purpose="top-navigation">
+    <div class="flex items-center gap-4">
+      <div class="bg-soc-blue p-2 rounded-md">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+      </div>
+      <h1 class="text-xl font-bold text-white tracking-tight">WLAN Enterprise SOC Dashboard</h1>
+      <div class="ml-4 flex items-center bg-green-900/20 px-3 py-1 rounded-full border border-soc-green/30">
+        <span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
+        <span class="text-[10px] font-bold text-soc-green uppercase tracking-wider">Engine: Active</span>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-6 text-soc-text-muted">
+      <div class="flex items-center gap-4 text-sm font-medium border-r border-soc-border pr-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span id="live-date">--,-- ----</span>
         </div>
-</div>
-<div class="flex items-center gap-4">
-<button class="hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a9.05 9.05 0 0112.14 0m-15.38-5.303a13.5 13.5 0 0118.636 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
-<div class="relative">
-<button class="hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
-<span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-soc-bg"></span>
-</div>
-<div class="flex items-center gap-2 cursor-pointer hover:opacity-80">
-<img alt="User Profile" class="w-8 h-8 rounded-full border border-soc-border object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhZYEJDzh4ibCyQ7Nba4cXI_iRS3E_QSW7EcZHMKHngZk78cbACNpIfUn759lMoPn0o4M4ScL501smhA8iPAFNgwPsF98O8_8h_-Z3kLFkBeisbyeGlC5fimC-K0UMkb7Yk_qsOaL8iPOC8t2Sl-xo9-dFvmZsoaqLePf_BfqExIgDBYrnNlyhRcSsMI5gUScIs92TZQwQrrdeBk7JDT910vFS2wKyqecP5Am0920HTWR1s-_yabtoVtuqOzTgEd6np-i_t-ysx6I">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
-</div>
-</header>
-<!-- END: MainHeader -->
-<!-- BEGIN: MainContent -->
-<main class="flex-grow space-y-6 pt-6 px-6">
-<!-- BEGIN: StatsGrid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-purpose="statistics-cards">
-<!-- Card 1: Total Alerts -->
-<div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Total Alerts</p>
-<h2 class="text-3xl font-bold text-white mt-1">1,284</h2>
-</div>
-<div class="text-soc-blue bg-soc-blue/10 p-2 rounded-md border border-soc-blue/20">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between">
-<div class="flex items-center text-soc-green text-xs font-medium">
-<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            12% from last shift
+        <div class="bg-[#1b2129] px-3 py-1 rounded text-white font-mono border border-soc-border" id="live-clock">
+          00:00:00
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-8 h-8 rounded-full border border-soc-border bg-soc-blue/20 flex items-center justify-center text-xs text-soc-blue font-bold">SOC</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow space-y-6 pt-6 px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-purpose="statistics-cards">
+      <div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Total Alerts</p>
+            <h2 class="text-3xl font-bold text-white mt-1" id="count-total">0</h2>
           </div>
-<svg class="sparkline text-soc-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40">
-<path d="M0 35 L20 30 L40 38 L60 25 L80 32 L100 15" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</div>
-</div>
-<!-- Card 2: Critical Alerts -->
-<div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Critical Alerts</p>
-<h2 class="text-3xl font-bold text-white mt-1">02</h2>
-</div>
-<div class="text-soc-red bg-soc-red/10 p-2 rounded-md border border-soc-red/20">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.618 5.984A11.066 11.066 0 0112 2.124a11.066 11.066 0 01-8.618 3.86M12 12.75v3.375m0-11.25V5.25" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M12 21.75c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between">
-<div class="text-soc-red text-xs font-medium flex items-center">
-<span class="mr-1">!</span> 1 requires immediate action
+          <div class="text-soc-blue bg-soc-blue/10 p-2 rounded-md border border-soc-blue/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
           </div>
-<svg class="sparkline text-soc-red" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40">
-<path d="M0 35 L30 32 L50 36 L80 20 L100 25" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</div>
-</div>
-<!-- Card 3: High Alerts -->
-<div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">High Alerts</p>
-<h2 class="text-3xl font-bold text-white mt-1">14</h2>
-</div>
-<div class="text-soc-orange bg-soc-orange/10 p-2 rounded-md border border-soc-orange/20">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between">
-<div class="text-soc-yellow text-xs font-medium">Scan pending for 3 assets</div>
-<svg class="sparkline text-soc-yellow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40">
-<path d="M0 38 L25 35 L50 30 L75 15 L100 22" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</div>
-</div>
-<!-- Card 4: Automated Triage -->
-<div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Automated Triage</p>
-<h2 class="text-3xl font-bold text-white mt-1">86</h2>
-</div>
-<div class="text-soc-blue bg-soc-blue/10 p-2 rounded-md border border-soc-blue/20">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between">
-<div class="text-soc-text-muted text-xs font-medium italic">Automated triage active</div>
-<svg class="sparkline text-soc-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40">
-<path d="M0 35 L20 38 L40 25 L60 30 L80 15 L100 28" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</div>
-</div>
-</div>
-<!-- END: StatsGrid -->
-<!-- BEGIN: LogSection -->
-<div class="bg-soc-card border border-soc-border rounded-lg flex flex-col" data-purpose="threat-intelligence-logs">
-<!-- Table Header/Toolbar -->
-<div class="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-soc-border">
-<div class="flex items-center gap-3">
-<svg class="w-6 h-6 text-soc-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<h3 class="text-lg font-bold text-white">Threat Intelligence Logs</h3>
-<div class="flex items-center bg-green-900/10 px-2 py-0.5 rounded border border-soc-green/20">
-<span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
-<span class="text-[9px] font-bold text-soc-green uppercase">Live Feed</span>
-</div>
-</div>
-<div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
-<div class="relative w-full sm:w-64">
-<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-soc-text-muted">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-<input class="w-full bg-[#0d1117] border-soc-border text-sm rounded-md pl-10 pr-4 py-2 focus:ring-soc-blue focus:border-soc-blue text-soc-text-muted" placeholder="Filter by IP, Type or User..." type="text">
-</div>
-<button class="bg-soc-blue hover:bg-soc-blue/90 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            Manual Refresh
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex items-center text-soc-green text-xs font-medium">Live Feed Monitoring</div>
+          <svg class="sparkline text-soc-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40"><path d="M0 35 L20 30 L40 38 L60 25 L80 32 L100 15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+      
+      <div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Critical Alerts</p>
+            <h2 class="text-3xl font-bold text-soc-red mt-1" id="count-critical">0</h2>
+          </div>
+          <div class="text-soc-red bg-soc-red/10 p-2 rounded-md border border-soc-red/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.618 5.984A11.066 11.066 0 0112 2.124a11.066 11.066 0 01-8.618 3.86M12 12.75v3.375m0-11.25V5.25" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M12 21.75c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="text-soc-red text-xs font-medium flex items-center" id="critical-subtext">0 Priority Issues</div>
+          <svg class="sparkline text-soc-red" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40"><path d="M0 35 L30 32 L50 36 L80 20 L100 25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+
+      <div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">High Alerts</p>
+            <h2 class="text-3xl font-bold text-soc-orange mt-1" id="count-high">0</h2>
+          </div>
+          <div class="text-soc-orange bg-soc-orange/10 p-2 rounded-md border border-soc-orange/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="text-soc-orange text-xs font-medium">Requires Inspection</div>
+          <svg class="sparkline text-soc-yellow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40"><path d="M0 38 L25 35 L50 30 L75 15 L100 22" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+
+      <div class="bg-soc-card border border-soc-border rounded-lg p-5 flex flex-col justify-between">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-soc-text-muted text-xs font-bold uppercase tracking-widest">Medium / Info</p>
+            <h2 class="text-3xl font-bold text-soc-yellow mt-1" id="count-other">0</h2>
+          </div>
+          <div class="text-soc-yellow bg-soc-yellow/10 p-2 rounded-md border border-soc-yellow/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="text-soc-text-muted text-xs font-medium italic">Low priority triage</div>
+          <svg class="sparkline text-soc-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 40"><path d="M0 35 L20 38 L40 25 L60 30 L80 15 L100 28" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-soc-card border border-soc-border rounded-lg flex flex-col" data-purpose="threat-intelligence-logs">
+      <div class="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-soc-border">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-soc-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <h3 class="text-lg font-bold text-white">Threat Intelligence Logs</h3>
+          <div class="flex items-center bg-green-900/10 px-2 py-0.5 rounded border border-soc-green/20">
+            <span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
+            <span class="text-[9px] font-bold text-soc-green uppercase">Live Feed</span>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+          <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-soc-text-muted">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </span>
+            <input id="table-filter" oninput="renderTable()" class="w-full bg-[#0d1117] border-soc-border text-sm rounded-md pl-10 pr-4 py-2 focus:ring-soc-blue focus:border-soc-blue text-white" placeholder="Filter by IP, Proto, Signature..." type="text">
+          </div>
+          <button id="refresh-btn" onclick="manualRefresh()" class="bg-soc-blue hover:bg-soc-blue/90 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            <span>Refresh Feed</span>
           </button>
-<div class="text-soc-text-muted text-xs flex items-center gap-1">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            Last Updated: <span class="text-white ml-1">21:52:16</span>
-</div>
-</div>
-</div>
-<!-- Table Container -->
-<div class="overflow-x-auto">
-<table class="w-full text-left text-sm" data-purpose="log-table">
-<thead class="bg-[#1b2129] text-soc-text-muted font-bold text-[11px] uppercase tracking-wider">
-<tr>
-<th class="px-6 py-4">Timestamp</th>
-<th class="px-6 py-4">Source_IP</th>
-<th class="px-6 py-4">Event_Type</th>
-<th class="px-6 py-4">Severity</th>
-<th class="px-6 py-4">Action</th>
-<th class="px-6 py-4">Status</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-soc-border">
-<!-- Row 1 -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-6 py-5 text-soc-text-muted font-mono">14:22:10</td>
-<td class="px-6 py-5 text-soc-blue font-mono">192.168.1.45</td>
-<td class="px-6 py-5 text-white">SSH Brute Force</td>
-<td class="px-6 py-5">
-<span class="bg-red-500/10 text-soc-red border border-soc-red/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Critical</span>
-</td>
-<td class="px-6 py-5 italic text-soc-text-muted">IP Blocked</td>
-<td class="px-6 py-5 flex items-center">
-<span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
-<span class="">Resolved</span>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-6 py-5 text-soc-text-muted font-mono">14:21:05</td>
-<td class="px-6 py-5 text-soc-blue font-mono">10.0.4.122</td>
-<td class="px-6 py-5 text-white">SQL Injection Attempt</td>
-<td class="px-6 py-5">
-<span class="bg-orange-500/10 text-soc-orange border border-soc-orange/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">High</span>
-</td>
-<td class="px-6 py-5 italic text-soc-text-muted">WAF Filtered</td>
-<td class="px-6 py-5 flex items-center">
-<span class="w-2 h-2 bg-soc-orange rounded-full mr-2"></span>
-<span class="">Flagged</span>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-6 py-5 text-soc-text-muted font-mono">14:19:50</td>
-<td class="px-6 py-5 text-soc-blue font-mono">172.16.0.8</td>
-<td class="px-6 py-5 text-white">Unauthorized Access</td>
-<td class="px-6 py-5">
-<span class="bg-yellow-500/10 text-soc-yellow border border-soc-yellow/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Medium</span>
-</td>
-<td class="px-6 py-5 italic text-soc-text-muted">Log Recorded</td>
-<td class="px-6 py-5 flex items-center">
-<span class="w-2 h-2 bg-soc-yellow rounded-full mr-2"></span>
-<span class="">Investigating</span>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-6 py-5 text-soc-text-muted font-mono">14:18:22</td>
-<td class="px-6 py-5 text-soc-blue font-mono">192.168.10.1</td>
-<td class="px-6 py-5 text-white">New Device Joined</td>
-<td class="px-6 py-5">
-<span class="bg-green-500/10 text-soc-green border border-soc-green/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Low</span>
-</td>
-<td class="px-6 py-5 italic text-soc-text-muted">Inventory Added</td>
-<td class="px-6 py-5 flex items-center">
-<span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
-<span class="">Verified</span>
-</td>
-</tr>
-<!-- Row 5 -->
-<tr class="hover:bg-white/5 transition-colors">
-<td class="px-6 py-5 text-soc-text-muted font-mono">14:15:30</td>
-<td class="px-6 py-5 text-soc-blue font-mono">8.8.8.8</td>
-<td class="px-6 py-5 text-white">Port Scan Detected</td>
-<td class="px-6 py-5">
-<span class="bg-orange-500/10 text-soc-orange border border-soc-orange/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">High</span>
-</td>
-<td class="px-6 py-5 italic text-soc-text-muted">Auto-Defend</td>
-<td class="px-6 py-5 flex items-center">
-<span class="w-2 h-2 bg-soc-green rounded-full mr-2"></span>
-<span class="">Active</span>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- Pagination Footer -->
-<div class="px-6 py-4 flex items-center justify-between border-t border-soc-border">
-<p class="text-xs text-soc-text-muted">Showing 1 to 5 of 5 entries</p>
-<div class="flex items-center gap-1">
-<button class="px-3 py-1.5 text-xs font-medium text-soc-text-muted hover:text-white border border-soc-border rounded-l-md bg-transparent transition-colors">Previous</button>
-<button class="px-3 py-1.5 text-xs font-bold text-white bg-soc-blue border border-soc-blue rounded-none">1</button>
-<button class="px-3 py-1.5 text-xs font-medium text-soc-text-muted hover:text-white border border-soc-border rounded-r-md bg-transparent transition-colors">Next</button>
-</div>
-</div>
-</div>
-<!-- END: LogSection -->
-</main>
-<!-- END: MainContent -->
-<!-- BEGIN: Footer -->
-<footer class="px-6 py-3 border-t border-soc-border flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-soc-text-muted font-medium bg-[#0b0e14]">
-<div class="flex items-center gap-8">
-<div class="flex items-center">
-<span class="">API Status:</span>
-<span class="w-2 h-2 bg-soc-green rounded-full mx-2"></span>
-<span class="text-white">Connected</span>
-</div>
-<div class="h-4 w-px bg-soc-border"></div>
-<div class="flex items-center">
-<span class="">Database Status:</span>
-<span class="w-2 h-2 bg-soc-green rounded-full mx-2"></span>
-<span class="text-white">Connected</span>
-</div>
-<div class="h-4 w-px bg-soc-border"></div>
-<div class="flex items-center">
-<span class="">Monitoring Status:</span>
-<span class="w-2 h-2 bg-soc-green rounded-full mx-2"></span>
-<span class="text-white">Active</span>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<span class="">Version 1.0</span>
-<span class="h-4 w-px bg-soc-border"></span>
-<span class="">© 2025 WLAN SOC. All rights reserved.</span>
-</div>
-</footer>
-<!-- END: Footer -->
+          <div class="text-soc-text-muted text-xs flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Last Sync: <span class="text-white ml-1" id="last-updated-time">--:--:--</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm" data-purpose="log-table">
+          <thead class="bg-[#1b2129] text-soc-text-muted font-bold text-[11px] uppercase tracking-wider">
+            <tr>
+              <th class="px-6 py-4">Timestamp</th>
+              <th class="px-6 py-4">Source IP</th>
+              <th class="px-6 py-4">Destination IP</th>
+              <th class="px-6 py-4">Event / Signature</th>
+              <th class="px-6 py-4">Protocol</th>
+              <th class="px-6 py-4">Severity</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-soc-border" id="log-table-body">
+            <tr>
+              <td colspan="6" class="px-6 py-10 text-center text-soc-text-muted">Awaiting stream events from Suricata framework context...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="px-6 py-4 flex items-center justify-between border-t border-soc-border">
+        <p class="text-xs text-soc-text-muted" id="pagination-text">Showing 0 to 0 of 0 entries</p>
+      </div>
+    </div>
+  </main>
 
+  <footer class="px-6 py-3 border-t border-soc-border flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-soc-text-muted font-medium bg-[#0b0e14]">
+    <div class="flex items-center gap-8">
+      <div class="flex items-center">
+        <span>API Status:</span>
+        <span class="w-2 h-2 bg-soc-green rounded-full mx-2" id="api-status-dot"></span>
+        <span class="text-white" id="api-status-text">Connected</span>
+      </div>
+      <div class="h-4 w-px bg-soc-border"></div>
+      <div class="flex items-center">
+        <span>IDS Engine:</span>
+        <span class="w-2 h-2 bg-soc-green rounded-full mx-2"></span>
+        <span class="text-white">Active (Suricata)</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span>Version 1.0</span>
+      <span class="h-4 w-px bg-soc-border"></span>
+      <span>© 2026 WLAN SOC. All rights reserved.</span>
+    </div>
+  </footer>
 
-</body></html>
+  <script>
+    let globalAlertsCache = [];
+
+    function updateClockAndDate() {
+      const now = new Date();
+      document.getElementById('live-clock').innerText = now.toLocaleTimeString();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('live-date').innerText = now.toLocaleDateString('en-US', options).toUpperCase();
+    }
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate();
+
+    async function fetchLogs() {
+      try {
+        const response = await fetch('/api/logs');
+        if (!response.ok) throw new Error("API infrastructure unreachable.");
+        
+        globalAlertsCache = await response.json();
+        
+        let total = globalAlertsCache.length;
+        let critical = 0, high = 0, other = 0;
+
+        globalAlertsCache.forEach(alert => {
+          // Suricata native: 1=Critical/High, 2=Medium, 3=Low
+          if (alert.severity == 1 || String(alert.severity).toLowerCase() === 'critical') {
+            critical++;
+          } else if (alert.severity == 2 || String(alert.severity).toLowerCase() === 'high') {
+            high++;
+          } else {
+            other++;
+          }
+        });
+
+        document.getElementById('count-total').innerText = total;
+        document.getElementById('count-critical').innerText = critical;
+        document.getElementById('count-high').innerText = high;
+        document.getElementById('count-other').innerText = other;
+        document.getElementById('critical-subtext').innerText = `${critical} priority anomalies logged`;
+        document.getElementById('last-updated-time').innerText = new Date().toLocaleTimeString();
+        
+        document.getElementById('api-status-dot').className = "w-2 h-2 bg-soc-green rounded-full mx-2";
+        document.getElementById('api-status-text').innerText = "Connected";
+
+        renderTable();
+      } catch (err) {
+        console.error("Data pipeline processing mapping layout error:", err);
+        document.getElementById('api-status-dot').className = "w-2 h-2 bg-soc-red rounded-full mx-2";
+        document.getElementById('api-status-text').innerText = "Disconnected / Error";
+      }
+    }
+
+    function manualRefresh() {
+      const btn = document.getElementById('refresh-btn');
+      btn.classList.add('opacity-50', 'pointer-events-none');
+      fetchLogs().finally(() => {
+        setTimeout(() => btn.classList.remove('opacity-50', 'pointer-events-none'), 500);
+      });
+    }
+
+    function renderTable() {
+      const filterValue = document.getElementById('table-filter').value.toLowerCase();
+      const tableBody = document.getElementById('log-table-body');
+      
+      const filteredData = globalAlertsCache.filter(item => {
+        return (
+          item.src_ip.toLowerCase().includes(filterValue) ||
+          item.dest_ip.toLowerCase().includes(filterValue) ||
+          item.proto.toLowerCase().includes(filterValue) ||
+          (item.signature || item.category || '').toLowerCase().includes(filterValue)
+        );
+      });
+
+      let tableHtml = '';
+
+      if (filteredData.length === 0) {
+        tableHtml = `
+          <tr>
+            <td colspan="6" class="px-6 py-10 text-center text-soc-text-muted">
+              No anomalies found matching criteria landscape filters.
+            </td>
+          </tr>`;
+      } else {
+        filteredData.forEach(alert => {
+          let sevBadge = '';
+          if (alert.severity == 1 || String(alert.severity).toLowerCase() === 'critical') {
+            sevBadge = `<span class="bg-red-500/10 text-soc-red border border-soc-red/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Critical</span>`;
+          } else if (alert.severity == 2 || String(alert.severity).toLowerCase() === 'high') {
+            sevBadge = `<span class="bg-orange-500/10 text-soc-orange border border-soc-orange/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">High</span>`;
+          } else {
+            sevBadge = `<span class="bg-yellow-500/10 text-soc-yellow border border-soc-yellow/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Info</span>`;
+          }
+
+          let displayTime = alert.timestamp ? alert.timestamp.substring(11, 19) : 'N/A';
+
+          tableHtml += `
+            <tr class="hover:bg-white/5 transition-colors">
+              <td class="px-6 py-5 text-soc-text-muted font-mono">${displayTime}</td>
+              <td class="px-6 py-5 text-soc-blue font-mono">${alert.src_ip}</td>
+              <td class="px-6 py-5 text-soc-text-muted font-mono">${alert.dest_ip}</td>
+              <td class="px-6 py-5 text-white font-medium">${alert.signature || alert.category || 'Unknown Signature'}</td>
+              <td class="px-6 py-5 text-soc-text-muted uppercase font-mono">${alert.proto}</td>
+              <td class="px-6 py-5">${sevBadge}</td>
+            </tr>`;
+        });
+      }
+
+      tableBody.innerHTML = tableHtml;
+      document.getElementById('pagination-text').innerText = `Showing 1 to ${filteredData.length} of ${filteredData.length} entries`;
+    }
+
+    // Auto update every 3 seconds
+    fetchLogs();
+    setInterval(fetchLogs, 3000);
+  </script>
+</body>
+</html>
