@@ -1,102 +1,89 @@
 #!/usr/bin/env bash
 
-# Ensure running as root
 if [ "$EUID" -ne 0 ]; then
-  echo "[-] Please run this script using sudo."
+  echo "[-] Script requires elevated access context. Please issue command with sudo."
   exit 1
 fi
 
-echo "===================================================="
-echo "       WLAN-SOC Managed Service Installer"
-echo "===================================================="
+PROJECT_DIR=$(pwd)
+CONFIG_FILE="$PROJECT_DIR/config/config.json"
 
-# 1. Detect and Ask for Interface
-DEFAULT_IFACE=$(ip route | grep default | awk '{print $5}' | head -n1)
-if [ -z "$DEFAULT_IFACE" ]; then
-    DEFAULT_IFACE="eth0"
-fi
+clear
+echo "========================================================================="
+echo "  _      _ _       _   _      _  _____  ____   _____ "
+echo " | |    | | |     | \ | |    | |/ ____|/ __ \ / ____|"
+echo " | |  /\  | |     |  \| |____| | (___ | |  | | |     "
+echo " | | /  \ | |     | . \` |____| |\___ \| |  | | |     "
+echo " | |/ /\ \| |____ | |\  |    | |____) | |__| | |____ "
+echo " |___/  \_\______|____\_|    |_|_____/ \____/ \_____|"
+echo "                                                     "
+echo "       WLAN-SOC Automated Managed Service Installer"
+echo "========================================================================="
 
-read -p "[?] Enter network interface to sniff [$DEFAULT_IFACE]: " USER_IFACE
-INTERFACE=${USER_IFACE:-$DEFAULT_IFACE}
-
-read -p "[?] Enter Primary API Port [5000]: " USER_PORT
-PORT=${USER_PORT:-5000}
-BACKUP_PORT=$((PORT + 1))
-
-# 2. Install System Dependencies
-echo "[*] Synchronizing environment mirrors & installing binaries..."
-apt-get update -y && apt-get install -y apache2 suricata python3 python3-pip python3-flask python3-flask-cors curl jq
-
-# 3. Create Configuration Ecosystem
-echo "[*] Writing static asset directory paths..."
-mkdir -p /etc/wlan-soc
-mkdir -p /var/log/suricata
-
-cat <<EOF > /etc/wlan-soc/config.json
+# Validate existing configuration parameters before system setup
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "[-] Configuration not found at $CONFIG_FILE. Creating default fallback layout."
+    mkdir -p "$PROJECT_DIR/config"
+    cat <<EOF > "$CONFIG_FILE"
 {
-  "interface": "$INTERFACE",
-  "port": $PORT,
-  "backup_port": $BACKUP_PORT
+    "interface": "wlan0",
+    "port": 2000,
+    "backup_port": 2001
 }
 EOF
+fi
 
-# 4. Stage Orchestrator Files
-echo "[*] Packaging core application engines..."
-cp soc_orchestrator.py /etc/wlan-soc/soc_orchestrator.py
-chmod +x /etc/wlan-soc/soc_orchestrator.py
+# Ensure jq dependency is locally present before config serialization parsing
+if ! command -v jq &> /dev/null; then
+    echo "[*] Bootstrapping jq engine tracking utilities..."
+    apt-get update -y && apt-get install -y jq
+fi
 
-# 5. Build Apache Deployment Structure
-echo "[*] Setting web root environments..."
-mkdir -p /var/www/html/wlan-soc
+INTERFACE=$(jq -r '.interface' "$CONFIG_FILE")
+PORT=$(jq -r '.port' "$CONFIG_FILE")
 
-# Production-ready index page that connects to your endpoints
-cat <<EOF > /var/www/html/wlan-soc/index.html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>WLAN-SOC Dashboard</title>
-    <style>body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }</style>
-</head>
-<body>
-  <h2>[ WLAN-SOC REAL-TIME ALERTS BOARD ]</h2>
-  <hr style="border-color: #0f0;">
-  <pre id="logs">Waiting for background service startup authorization pipeline...</pre>
-  
-  <script>
-    function fetchTelemetry() {
-        fetch('/api/logs')
-          .then(res => res.json())
-          .then(data => {
-              document.getElementById('logs').innerText = JSON.stringify(data, null, 2);
-          })
-          .catch(err => {
-              document.getElementById('logs').innerText = "System Idle or API Service is Stopped.";
-          });
-    }
-    setInterval(fetchTelemetry, 3000);
-    fetchTelemetry();
-  </script>
-</body>
-</html>
-EOF
+echo "[+] Target environment parsed: Interface [$INTERFACE] on HTTP Port [$PORT]"
+echo "[*] Handling dependency requirements..."
 
-chown -R www-data:www-data /var/www/html/wlan-soc
-systemctl restart apache2
+apt-get update -y && apt-get install -y suricata python3 python3-pip python3-flask python3-flask-cors curl lsb-release
 
-# 6. Generate Unit Service Definitions
-echo "[*] Registering systemd execution models..."
+# Download and install ngrok handling dynamic platform names safely to prevent deb-conflicts
+if ! command -v ngrok &> /dev/null; then
+    echo "[*] Installing official ngrok binary..."
+    rm -f /etc/apt/sources.list.d/ngrok.list
+    curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+    
+    # Extract native system codename dynamically instead of hardcoding buster
+    OS_CODENAME=$(lsb_release -cs)
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/ngrok.asc] https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list
+    
+    apt-get update -y && apt-get install ngrok -y
+fi
+
+if systemctl is-active --quiet apache2; then
+    echo "[*] Disabling conflicting Apache structural endpoints..."
+    systemctl stop apache2
+    systemctl disable apache2
+fi
+
+echo "[*] Generating local context workspace components..."
+mkdir -p "$PROJECT_DIR/Static"
+mkdir -p "/var/log/suricata"
+
+chmod +x "$PROJECT_DIR/soc_orchestrator.py"
+
+echo "[*] Building active daemon runtime environment configs..."
 cat <<EOF > /etc/systemd/system/wlan-soc.service
 [Unit]
 Description=WLAN-SOC Sniffing & API Orchestrator Daemon
-After=network.target apache2.service
+After=network.target
 
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/etc/wlan-soc
-ExecStart=/usr/bin/python3 /etc/wlan-soc/soc_orchestrator.py
-ExecStop=/usr/bin/python3 -c "import subprocess; subprocess.run(['pkill', '-f', 'ngrok']); subprocess.run(['pkill', '-f', 'suricata'])"
+WorkingDirectory=$PROJECT_DIR
+ExecStart=/usr/bin/python3 $PROJECT_DIR/soc_orchestrator.py
+ExecStop=/usr/bin/python3 -c "import subprocess; subprocess.run(['pkill', '-f', 'suricata']); subprocess.run(['pkill', '-f', 'ngrok'])"
 Restart=always
 RestartSec=5
 
@@ -104,17 +91,12 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# 7. Complete Reload Without Active Run Commands
 systemctl daemon-reload
+systemctl enable wlan-soc
+systemctl restart wlan-soc
 
 echo "===================================================="
-echo "[+] Target installation processes completed successfully."
-echo "[-] STATUS: Service is registered but remains DISABLED/STOPPED."
-echo "===================================================="
-echo ""
-echo "To interact with your newly structured service, execute:"
-echo "  -> Start Service:    sudo systemctl start wlan-soc"
-echo "  -> Enable Boot Start: sudo systemctl enable wlan-soc"
-echo "  -> Check Status:      sudo systemctl status wlan-soc"
-echo ""
+echo "[+] Deployment finalized successfully."
+echo "[+] Local Dashboard View: http://127.0.0.1:$PORT"
+echo "[*] Check public URL via: sudo systemctl status wlan-soc"
 echo "===================================================="
