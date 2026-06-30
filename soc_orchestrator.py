@@ -4,8 +4,7 @@ import sys
 import subprocess
 import threading
 import time
-from flask import Flask, jsonify, render_with_template # type: ignore (if using vanilla Flask)
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
