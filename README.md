@@ -34,7 +34,10 @@ This framework processes live network packets, filters signatures for malicious 
 ngrok config add-authtoken <YOUR_AUTHTOKEN>
 ```
 
-Step 2: Configure Suricata Parameters
+---
+---
+
+## Step 2: Configure Suricata Parameters
 1. Find your target network interface name (e.g., wlan0, mon0, eth0):
 
 ```bash
