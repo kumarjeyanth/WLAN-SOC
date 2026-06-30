@@ -10,14 +10,14 @@ CONFIG_FILE="$PROJECT_DIR/config/config.json"
 
 clear
 echo "========================================================================="
-echo "  _      _ _       _   _      _  _____  ____   _____ "
-echo " | |    | | |     | \ | |    | |/ ____|/ __ \ / ____|"
-echo " | |  /\  | |     |  \| |____| | (___ | |  | | |     "
-echo " | | /  \ | |     | . \` |____| |\___ \| |  | | |     "
-echo " | |/ /\ \| |____ | |\  |    | |____) | |__| | |____ "
-echo " |___/  \_\______|____\_|    |_|_____/ \____/ \_____|"
-echo "                                                     "
-echo "       WLAN-SOC Automated Managed Service Installer"
+echo "  _      _ _       _   _       _  _____  ____   _____ "
+echo " | |    | | |     | \ | |     | |/ ____|/ __ \ / ____|"
+echo " | |    /\  | |     |  \| |____| | (___ | |  | | |     "
+echo " | |   /  \ | |     | . \` |____| |\___ \| |  | | |     "
+echo " | |__/ /\ \| |____ | |\  |    | |____) | |__| | |____ "
+echo " |___/_/  \_\______|____\_|    |_|_____/ \____/ \_____|"
+echo "                                                       "
+echo "        WLAN-SOC Automated Managed Service Installer"
 echo "========================================================================="
 
 # Validate existing configuration parameters before system setup
@@ -53,9 +53,9 @@ if ! command -v ngrok &> /dev/null; then
     rm -f /etc/apt/sources.list.d/ngrok.list
     curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
     
-    # Extract native system codename dynamically instead of hardcoding buster
+    # FIXED: Replaced hardcoded 'buster' with dynamically pulled OS_CODENAME variable
     OS_CODENAME=$(lsb_release -cs)
-    echo "deb [signed-by=/etc/apt/trusted.gpg.d/ngrok.asc] https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/ngrok.asc] https://ngrok-agent.s3.amazonaws.com ${OS_CODENAME} main" | tee /etc/apt/sources.list.d/ngrok.list
     
     apt-get update -y && apt-get install ngrok -y
 fi
@@ -67,7 +67,8 @@ if systemctl is-active --quiet apache2; then
 fi
 
 echo "[*] Generating local context workspace components..."
-mkdir -p "$PROJECT_DIR/Static"
+# FIXED: Changed from uppercase "Static" to lowercase "static"
+mkdir -p "$PROJECT_DIR/static"
 mkdir -p "/var/log/suricata"
 
 chmod +x "$PROJECT_DIR/soc_orchestrator.py"
