@@ -1,0 +1,5 @@
+{
+  "interface": "wlan0",
+  "port": 2000,
+  "backup_port": 2001
+}
