@@ -182,6 +182,9 @@ chmod +x install.sh
 
 sudo ./install.sh
 ```
+<br>
+![Alternative Text](Imgs/WLAN-SOC-CLI.png)
+
 
 ---
 
@@ -222,7 +225,8 @@ sudo systemctl status wlan-soc
 > **Active Network Gateways**
 > - 🖥️ **Local Console:** `http://localhost:2000`
 > - 🌍 **Public Ngrok Access:** `https://xxxx-xx-xx-xx.ngrok-free.app`
-
+<br>
+![Alternative Text](Imgs/WLAN-SOC-WEB_VIEW.png)
 <br>
 
 ### 🪵 Tail the Live Output Telemetry Stream
